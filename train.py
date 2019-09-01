@@ -95,7 +95,7 @@ def train(epochs, batch_size, input_dir, model_save_dir):
         print("gan_loss :", gan_loss)
         gan_loss = str(gan_loss)
         
-        if e % 1 == 0:
+        if e % 50 == 0:
             generator.save_weights(model_save_dir + 'gen_model%d.h5' % e)
             discriminator.save_weights(model_save_dir + 'dis_model%d.h5' % e)
   
@@ -104,4 +104,4 @@ def train(epochs, batch_size, input_dir, model_save_dir):
 
 cwd = os.getcwd()
 print("working directory", cwd)
-train(100, 1, train_directory, model_save_dir)
+train(200, 4, train_directory, model_save_dir)
