@@ -96,8 +96,8 @@ def train(epochs, batch_size, input_dir, model_save_dir):
         gan_loss = str(gan_loss)
         
         if e % 1 == 0:
-            generator.save(model_save_dir + 'gen_model%d.h5' % e)
-            discriminator.save(model_save_dir + 'dis_model%d.h5' % e)
+            generator.save_weights(model_save_dir + 'gen_model%d.h5' % e)
+            discriminator.save_weights(model_save_dir + 'dis_model%d.h5' % e)
   
   networks.save_model(gan)
 
