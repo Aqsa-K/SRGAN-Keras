@@ -13,8 +13,14 @@ np.random.seed(10)
 downscale_factor = 4
 image_shape = (148,148,3)
 train_directory = 'data/train/combined_data/'
+
+
 model_save_dir = './checkpoints/saved_models/'
-output_dir = './checkpoints/saved_models/'
+if not os.path.exists('./checkpoints'):
+  os.makedirs('./checkpoints')
+
+if not os.path.exists(model_save_dir):
+  os.makedirs(model_save_dir)
 
 checkpoint_path = "checkpoints/training.ckpt"
 checkpoint_dir = os.path.dirname(checkpoint_path)
@@ -26,7 +32,7 @@ cp_callback = tf.keras.callbacks.ModelCheckpoint(checkpoint_path,
                                                  period=10)
 
 
-def train(epochs, batch_size, input_dir, output_dir, model_save_dir):
+def train(epochs, batch_size, input_dir, model_save_dir):
   
 
   # Make an instance of the VGG class
@@ -45,7 +51,7 @@ def train(epochs, batch_size, input_dir, output_dir, model_save_dir):
   generator = networks.Generator(input_shape=image_shape_downscaled)
   
   # Initialize the discriminator with the input image shape as the original image shape (HR image shape)
-  discriminator = networks.Discriminator(input_shape=image_shape)
+  discriminator = networks.Discriminator()
   
   # Get the optimizer to tweak parameters based on loss
   optimizer = vgg_model.get_optimizer()
@@ -82,18 +88,14 @@ def train(epochs, batch_size, input_dir, output_dir, model_save_dir):
 
             gan_Y = np.ones(batch_size) - np.random.random_sample(batch_size)*0.2
             discriminator.trainable = False
-            gan_loss = gan.train_on_batch(image_batch_lr, [image_batch_hr,gan_Y], callbacks = [cp_callback], verbose=1)
+            gan_loss = gan.train_on_batch(image_batch_lr, [image_batch_hr,gan_Y])
             
             
         print("discriminator_loss : %f" % discriminator_loss)
         print("gan_loss :", gan_loss)
         gan_loss = str(gan_loss)
         
-
-
-#         if e == 1 or e % 5 == 0:
-#             plot_generated_images(output_dir, e, generator, x_test_hr, x_test_lr)
-        if e % 50 == 0:
+        if e % 1 == 0:
             generator.save(model_save_dir + 'gen_model%d.h5' % e)
             discriminator.save(model_save_dir + 'dis_model%d.h5' % e)
   
@@ -102,4 +104,4 @@ def train(epochs, batch_size, input_dir, output_dir, model_save_dir):
 
 cwd = os.getcwd()
 print("working directory", cwd)
-train(100, 2, train_directory, output_dir, model_save_dir)
+train(100, 1, train_directory, model_save_dir)
