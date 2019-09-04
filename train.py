@@ -104,4 +104,4 @@ def train(epochs, batch_size, input_dir, model_save_dir):
 
 cwd = os.getcwd()
 print("working directory", cwd)
-train(200, 4, train_directory, model_save_dir)
+train(20, 8, train_directory, model_save_dir)
