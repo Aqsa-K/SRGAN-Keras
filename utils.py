@@ -16,8 +16,7 @@ def lr_images(images_real , downscale):
     
     images = []
     for img in  range(len(images_real)):
-        images.append(resize(images_real[img], [images_real[img].shape[0]//downscale,images_real[img].shape[1]//downscale], 
-                             anti_aliasing=True))
+        images.append((resize(images_real[img], [images_real[img].shape[0]//downscale,images_real[img].shape[1]//downscale]) * 255).astype(np.uint8))
     images_lr = np.array(images)
     return images_lr
     
@@ -64,3 +63,4 @@ def get_random_batch(x_train_lr, x_train_hr, num_images, batch_size):
     image_batch_lr = x_train_lr[rand_nums] 
 
     return image_batch_lr, image_batch_hr
+    

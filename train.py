@@ -42,7 +42,7 @@ def train(epochs, batch_size, input_dir, model_save_dir):
   x_train_lr, x_train_hr  = utils.load_training_data(input_dir, [148,148,3])
   
   #Based on the the batch size, get the total number of batches
-  batch_count = int(x_train_lr.shape[0]/batch_size)
+  batch_count = int(x_train_hr.shape[0]/batch_size)
   
   #Get the downscaled image shape based on the downscale factor
   image_shape_downscaled = utils.get_downscaled_shape(image_shape, downscale_factor)
@@ -51,7 +51,7 @@ def train(epochs, batch_size, input_dir, model_save_dir):
   generator = networks.Generator(input_shape=image_shape_downscaled)
   
   # Initialize the discriminator with the input image shape as the original image shape (HR image shape)
-  discriminator = networks.Discriminator()
+  discriminator = networks.Discriminator(image_shape)
   
   # Get the optimizer to tweak parameters based on loss
   optimizer = vgg_model.get_optimizer()
@@ -104,4 +104,4 @@ def train(epochs, batch_size, input_dir, model_save_dir):
 
 cwd = os.getcwd()
 print("working directory", cwd)
-train(20, 8, train_directory, model_save_dir)
+train(100, 16, train_directory, model_save_dir)

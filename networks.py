@@ -59,18 +59,6 @@ def up_block(X, f, filter_size, stage, block):
   return X
 
 
-def convolutional_block(X, f, filter_size, stage, block):
-  
-  # defining name basis
-  conv_name_base = 'srg' + str(stage) + block + '_branch'
-  bn_name_base = 'bn' + str(stage) + block + '_branch'
-  
-  X = Conv2D(filters = filter_size, kernel_size = (f, f), strides = (1, 1), padding = 'same', name = conv_name_base + '2b')(X)
-  X = BatchNormalization(momentum=0.5)(X)
-  X = Activation('relu')(X)
-  
-  return X
-
 def Generator(input_shape):
   """
   Implementation of the popular SRGAN the following architecture:
@@ -98,7 +86,7 @@ def Generator(input_shape):
   X = identity_block(X, 3, filters=[64,64], stage=2, block='f')
   
   X = Conv2D(filters = 64, kernel_size = (3, 3), strides = (1, 1), padding = 'same')(X)
-  X = Activation('relu')(X)
+  # X = Activation('relu')(X)
   
   X = Add()([X_shortcut, X])
   
